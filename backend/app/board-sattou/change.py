@@ -1,5 +1,5 @@
 # ============================================================================================================================
-# ||                                                     Create plan                                                        ||
+# ||                                                     Update plan                                                        ||
 # ============================================================================================================================
 
 
@@ -13,11 +13,11 @@ options = Options()
 options.add_argument('--headless')
 driver = webdriver.Chrome(options=options)
 
-def create():
+def change():
     source_file = "../../config.csv"
 
     # フォームページにアクセス
-    driver.get("https://salonboard.com/KLP/reserve/ext/extReserveRegist/?staffId={staffid}&date={dd}&rsvHour={hh}&rsvMinute={mm}&rlastupdate={last}")
+    driver.get("https://salonboard.com/KLP/reserve/ext/extReserveChange/?reserveId={reserveid}")
     time.sleep(1)
 
     with open(source_file, 'r', encoding="utf-8", errors="ignore") as file:
@@ -32,7 +32,7 @@ def create():
     # 検索結果を待つ（必要なら待機を増やす）
     time.sleep(1)
 
-create()
+change()
 
 driver.quit()
-print("---------------------------------- ✅ Create Successfully ---------------------------------")
+print("---------------------------------- ✅ Update Successfully ---------------------------------")
