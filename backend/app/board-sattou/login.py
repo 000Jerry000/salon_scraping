@@ -3,42 +3,33 @@
 # ============================================================================================================================
 
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-import time
-import csv
+async def login(page, human_wait):
 
-options = Options()
-options.add_argument('--headless')
-driver = webdriver.Chrome(options=options)
+    userId = "CD53764"
+    password = "@filament09-1"
 
-def login():
-    source_file = "../../config.csv"
+    # Step 1: Go to the login page
+    await page.goto("https://salonboard.com/login/")
 
-    # フォームページにアクセス
-    driver.get("https://salonboard.com/login/")
-    time.sleep(1)
+    # ユーザーID欄にフォーカスし、人間っぽく入力
+    await page.focus('input[name="userId"]')
+    await human_wait()
+    await page.fill('input[name="userId"]', '')
+    await human_wait()
+    await page.type('input[name="userId"]', userId, delay=120)
 
-    with open(source_file, 'r', encoding="utf-8", errors="ignore") as file:
-        reader = csv.reader(file)
-        next(reader)  # ヘッダー行をスキップ
-        userId = reader[0][1]
-        password = reader[0][2]
+    # パスワード欄にフォーカスし、クリアしてゆっくり入力
+    await page.focus('input[name="password"]')
+    await human_wait()
+    await page.fill('input[name="password"]', '')
+    await human_wait()
+    await page.type('input[name="password"]', password, delay=130)
 
-    # 氏名入力（姓と名の間は半角スペース）
-    name_input = driver.find_element(By.NAME, "userId")
-    name_input.send_keys(userId)
-    name_input = driver.find_element(By.NAME, "password")
-    name_input.send_keys(password)
+    # 少し間を置いてログインボタンクリック
+    await human_wait(500, 300)
+    await page.click('a.common-CNCcommon__primaryBtn.loginBtnSize')
 
-    # 検索ボタンをクリック（JS関数呼び出し型）
-    driver.find_element(By.CSS_SELECTOR, 'div.loginBtnWrap a').click()
+    # ログイン後に人間らしい確認待機
+    await human_wait(2000, 1000)
+    print("---------------------------------- ✅ Login Successfully ---------------------------------")
 
-    # 検索結果を待つ（必要なら待機を増やす）
-    time.sleep(1)
-
-login()
-
-driver.quit()
-print("---------------------------------- ✅ Login Successfully ---------------------------------")
