@@ -1,9 +1,10 @@
 import asyncio
-from login import login
-from getting_schedule import getting_schedule
 from playwright.async_api import async_playwright
-import asyncio
 import random
+from login import login
+from convert_board_data import convert_board_data
+from getting_schedule import getting_schedule
+from finding_diff import compare_rows
 
 async def human_wait(base=300, variance=200):
     """人間のような微妙な待機（ミリ秒）"""
@@ -42,11 +43,17 @@ async def main():
             });
             """)
 
-            print("▶ Step 1: Logging in to Sattou...")
+            print("▶ Step 1: Converting salon board data...")
+            convert_board_data()
+
+            print("▶ Step 2: Logging in to Sattou...")
             await login(page, human_wait)
 
-            print("▶ Step 2: Getting schedule page...")
+            print("▶ Step 3: Getting schedule page...")
             await getting_schedule(page, human_wait)
+
+            print("▶ Step 4: Finding different row...")
+            compare_rows('../data/sattou_schedule.csv', '../data/board_data.csv')
 
             print("✅ All steps completed successfully.")
             # await asyncio.sleep(9999)  # ページを保持したままにする（終了防止）

@@ -85,7 +85,7 @@ async def getting_schedule(page, human_wait):
     # ------------------------------------------------------
     html_element = await page.query_selector('div.sc_wrapper')
     html_code = await html_element.inner_html()
-    csv_file = "sattou_schedule.csv"
+    csv_file = "../data/sattou_schedule.csv"
     parse_schedule(html_code, csv_file)
 
     print(f"✅ データをCSVに保存しました: {csv_file}")
