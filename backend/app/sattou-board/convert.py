@@ -1,6 +1,6 @@
 import csv
 
-with open('../../予約一覧_20250701173206.csv', encoding='shift_jis', errors='ignore') as f:
+with open('../../board_data.csv', encoding='shift_jis', errors='ignore') as f:
     reader = csv.reader(f)
     data = list(reader)
 
