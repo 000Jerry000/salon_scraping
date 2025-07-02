@@ -16,14 +16,14 @@ async def login(page, human_wait):
     await human_wait()
     await page.fill('input[name="login_id"]', '')
     await human_wait()
-    await page.type('input[name="login_id"]', userId, delay=120)
+    await page.type('input[name="login_id"]', userId)
 
     # パスワード欄にフォーカスし、クリアしてゆっくり入力
     await page.focus('input[name="pw"]')
     await human_wait()
     await page.fill('input[name="pw"]', '')
     await human_wait()
-    await page.type('input[name="pw"]', password, delay=130)
+    await page.type('input[name="pw"]', password)
 
     # 少し間を置いてログインボタンクリック
     await human_wait(500, 300)

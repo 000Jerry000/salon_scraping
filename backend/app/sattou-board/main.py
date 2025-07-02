@@ -30,7 +30,7 @@ async def main():
     
             context = await browser.new_context(
                 user_agent=user_agent,
-                viewport={'width': 1024, 'height': 768}
+                viewport={'width': 1900, 'height': 900}
             )
     
             page = await context.new_page()
