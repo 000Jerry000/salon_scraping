@@ -49,7 +49,7 @@ async def main():
             await getting_schedule(page, human_wait)
 
             print("✅ All steps completed successfully.")
-            await asyncio.sleep(9999)  # ページを保持したままにする（終了防止）
+            # await asyncio.sleep(9999)  # ページを保持したままにする（終了防止）
 
 if __name__ == "__main__":
     asyncio.run(main())
