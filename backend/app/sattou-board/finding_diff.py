@@ -4,7 +4,7 @@ def read_csv(filepath):
     with open(filepath, encoding='utf-8', errors='ignore') as f:
         return [row for row in csv.reader(f) if len(row) >= 2]
 
-def compare_rows(a_file, b_file, output_file='a_diff_rows.csv'):
+def compare_rows(a_file, b_file, output_file='../data/outfile.csv'):
     a_data = read_csv(a_file)
     b_data = read_csv(b_file)
 
@@ -42,6 +42,3 @@ def compare_rows(a_file, b_file, output_file='a_diff_rows.csv'):
         print(f"✅ 差分 {len(different_rows)} 件を出力しました: {output_file}")
     else:
         print("✅ すべての行が一致しています。")
-
-# Run comparison
-compare_rows('./sattou_schedule.csv', './output.csv')
