@@ -29,6 +29,9 @@ def compare_rows(a_file, b_file, output_file='../data/outfile.csv'):
                     break
                 else:
                     mismatch_found = True
+            else:
+                mismatch_found = True
+
 
         # If no match found but mismatch exists, treat as different
         if mismatch_found and not match_found:

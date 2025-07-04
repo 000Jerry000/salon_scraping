@@ -3,33 +3,19 @@
 # ============================================================================================================================
 
 
-async def login(page, human_wait):
+import time
+from selenium.webdriver.common.by import By
 
+def login(driver):
+    driver.get("https://sv1.sattou.net/filament/")
+
+    # Step 4: Login
     userId = "hpbtest"
     password = "sattouhpb"
 
-    # Step 1: Go to the login page
-    await page.goto("https://sv1.sattou.net/filament/")
+    driver.find_element(By.CSS_SELECTOR, 'input[name="login_id"]').send_keys(userId)
+    driver.find_element(By.CSS_SELECTOR, 'input[name="pw"]').send_keys(password)
+    driver.find_element(By.CSS_SELECTOR, 'input[type="submit"]').click()
 
-    # ユーザーID欄にフォーカスし、人間っぽく入力
-    await page.focus('input[name="login_id"]')
-    await human_wait()
-    await page.fill('input[name="login_id"]', '')
-    await human_wait()
-    await page.type('input[name="login_id"]', userId)
-
-    # パスワード欄にフォーカスし、クリアしてゆっくり入力
-    await page.focus('input[name="pw"]')
-    await human_wait()
-    await page.fill('input[name="pw"]', '')
-    await human_wait()
-    await page.type('input[name="pw"]', password)
-
-    # 少し間を置いてログインボタンクリック
-    await human_wait(500, 300)
-    await page.click('input[type="submit"]')
-
-    # ログイン後に人間らしい確認待機
-    await human_wait(2000, 1000)
+    time.sleep(3)
     print("---------------------------------- ✅ Login to sattou Successfully ---------------------------------")
-

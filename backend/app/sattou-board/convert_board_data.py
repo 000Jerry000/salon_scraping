@@ -3,10 +3,13 @@ import csv
 
 def convert_board_data():
 
-    data_dir = '../board_file'
+    data_dir = '../downloads'
     output_dir = '../data'
     output_filename = 'board_data.csv'
 
+    # ✅ Ensure output folder exists
+    os.makedirs(output_dir, exist_ok=True)
+    
     # 🧹 Step 1: Empty the output folder
     for file in os.listdir(output_dir):
         file_path = os.path.join(output_dir, file)
