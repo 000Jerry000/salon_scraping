@@ -1,62 +1,62 @@
-import asyncio
-from playwright.async_api import async_playwright
-import random
-from login import login
+import os
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
+import csv
+
+
+from get_salon_schedul import get_salon_schedul
 from convert_board_data import convert_board_data
+from login import login
 from getting_schedule import getting_schedule
 from finding_diff import compare_rows
 
-async def human_wait(base=300, variance=200):
-    """人間のような微妙な待機（ミリ秒）"""
-    await asyncio.sleep((base + random.randint(-variance, variance)) / 1000)
+# Step 1: Set and clean download directory
+download_dir = os.path.abspath("../downloads")
+os.makedirs(download_dir, exist_ok=True)
 
+# 🔥 Clean download folder
+for filename in os.listdir(download_dir):
+    file_path = os.path.join(download_dir, filename)
+    try:
+        if os.path.isfile(file_path) or os.path.islink(file_path):
+            os.remove(file_path)
+        elif os.path.isdir(file_path):
+            import shutil
+            shutil.rmtree(file_path)
+    except Exception as e:
+        print(f"⚠️ Failed to delete {file_path}. Reason: {e}")
+print("✅ Download folder cleaned:", download_dir)
 
-async def main():
-    print("▶ Step 0: Starting browser...")
-    async with async_playwright() as p:
-        user_agent = (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/124.0.0.0 Safari/537.36"
-        )
-    
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(
-                headless=False,
-                args=[
-                    "--start-maximized",
-                    "--disable-blink-features=AutomationControlled",
-                ]
-            )
-    
-            context = await browser.new_context(
-                user_agent=user_agent,
-                viewport={'width': 1900, 'height': 900}
-            )
-    
-            page = await context.new_page()
+# Step 2: Configure Chrome to use the folder
+chrome_options = Options()
+chrome_options.add_experimental_option("prefs", {
+    "download.default_directory": download_dir,
+    "download.prompt_for_download": False,
+    "download.directory_upgrade": True,
+    "safebrowsing.enabled": True
+})
 
-            # Hide navigator.webdriver
-            await page.add_init_script("""
-            Object.defineProperty(navigator, 'webdriver', {
-                get: () => undefined
-            });
-            """)
+# Step 3: Launch browser
+driver = webdriver.Chrome(options=chrome_options)
 
-            print("▶ Step 1: Converting salon board data...")
-            convert_board_data()
+print("▶ Step 0: Loggin to Salonboard...")
+get_salon_schedul(driver, download_dir)
 
-            print("▶ Step 2: Logging in to Sattou...")
-            await login(page, human_wait)
+print("▶ Step 1: Converting salon board data...")
+convert_board_data()
 
-            print("▶ Step 3: Getting schedule page...")
-            await getting_schedule(page, human_wait)
+print("▶ Step 2: Logging in to Sattou...")
+login(driver)
 
-            print("▶ Step 4: Finding different row...")
-            compare_rows('../data/sattou_schedule.csv', '../data/board_data.csv')
+print("▶ Step 3: Getting schedule page...")
+getting_schedule(driver)
 
-            print("✅ All steps completed successfully.")
-            # await asyncio.sleep(9999)  # ページを保持したままにする（終了防止）
+print("▶ Step 4: Finding different row...")
+compare_rows('../data/sattou_schedule.csv', '../data/board_data.csv')
 
-if __name__ == "__main__":
-    asyncio.run(main())
+print("✅ All steps completed successfully.")
