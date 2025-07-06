@@ -40,7 +40,7 @@ def get_salon_schedul(driver, download_dir):
                 staff_list.append([value, name])
 
         # Write to CSV
-        with open('staff_list.csv', 'w', newline='', encoding='utf-8') as f:
+        with open('../data/staff_list.csv', 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow(['value', 'name'])  # header
             writer.writerows(staff_list)
