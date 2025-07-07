@@ -17,7 +17,7 @@ def get_salon_schedul(driver, download_dir):
     driver.find_element(By.CSS_SELECTOR, 'input[name="password"]').send_keys(password)
     driver.find_element(By.CSS_SELECTOR, ".common-CNCcommon__primaryBtn.loginBtnSize").click()
 
-    time.sleep(3)
+    print("✅ Login to Salonboard")
 
     # Step 5: Click "Today’s Schedule"
     try:
