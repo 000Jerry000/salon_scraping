@@ -14,6 +14,7 @@ from convert_board_data import convert_board_data
 from login import login
 from getting_schedule import getting_schedule
 from finding_diff import compare_rows
+from clear_diff import clear_diff
 
 # Step 1: Set and clean download directory
 download_dir = os.path.abspath("../downloads")
@@ -31,6 +32,17 @@ for filename in os.listdir(download_dir):
     except Exception as e:
         print(f"⚠️ Failed to delete {file_path}. Reason: {e}")
 print("✅ Download folder cleaned:", download_dir)
+
+data_dir = '../data'
+
+# ✅ Ensure output folder exists
+os.makedirs(data_dir, exist_ok=True)
+
+# 🧹 Step 1: Empty the output folder
+for file in os.listdir(data_dir):
+    file_path = os.path.join(data_dir, file)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
 
 # Step 2: Configure Chrome to use the folder
 chrome_options = Options()
@@ -58,5 +70,8 @@ getting_schedule(driver)
 
 print("▶ Step 4: Finding different row...")
 compare_rows('../data/sattou_schedule.csv', '../data/board_data.csv')
+
+print("▶ Step 5: Clear different data...")
+clear_diff()
 
 print("✅ All steps completed successfully.")

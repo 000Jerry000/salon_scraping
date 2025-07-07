@@ -7,15 +7,6 @@ def convert_board_data():
     output_dir = '../data'
     output_filename = 'board_data.csv'
 
-    # ✅ Ensure output folder exists
-    os.makedirs(output_dir, exist_ok=True)
-    
-    # 🧹 Step 1: Empty the output folder
-    for file in os.listdir(output_dir):
-        file_path = os.path.join(output_dir, file)
-        if os.path.isfile(file_path):
-            os.remove(file_path)
-
     # 🧾 Step 2: Find the only CSV file in board_file
     csv_files = [f for f in os.listdir(data_dir) if f.lower().endswith('.csv')]
 
