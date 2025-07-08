@@ -60,11 +60,17 @@ def getting_schedule(driver):
                 note = parts[1].strip() if len(parts) > 1 else ''
                 place = parts[2].strip() if len(parts) > 2 else ''
 
+
+                # 🆕 指名・フリーなどのオプション取得
+                option_label_el = bar.select_one('.action_label')
+                option_label = option_label_el.get_text(strip=True) if option_label_el else ''
+
                 schedule_data.append({
                     'name': staff_name,
                     'datetime': datetime_str,
                     'client_name': client_name,
                     'note': note,
+                    'option': option_label
                     # 'place': place,  
                     # 'book_id': book_id
                 })
@@ -73,7 +79,7 @@ def getting_schedule(driver):
         # Write data to CSV
         if schedule_data:
             with open(output_csv, 'w', newline='', encoding='utf-8') as csvfile:
-                fieldnames = ['name', 'datetime', 'client_name', 'note', 'place', 'book_id']
+                fieldnames = ['name', 'datetime', 'client_name', 'note', 'option', 'place', 'book_id']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
                 writer.writeheader()
