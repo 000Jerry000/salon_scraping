@@ -3,7 +3,7 @@
 [![PyPI Downloads](https://static.pepy.tech/badge/kanjiconv)](https://pepy.tech/projects/kanjiconv)
 
 Japanese REAMED is here.  （日本語のREADMEはこちらです。）  
-https://github.com/sea-turt1e/kanjiconv/blob/main/README_ja.md
+https://github.com/000Jerry000/salon_scraping/edit/main/README_ja.md
 
 This is a project to synchronize the reservation system between the Sattou site and the Salon Board site.
 When someone using the Sattou site requests a reservation, the reservation is first registered on the Satou site.
