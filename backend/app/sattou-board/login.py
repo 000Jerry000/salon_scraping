@@ -18,4 +18,4 @@ def login(driver):
     driver.find_element(By.CSS_SELECTOR, 'input[type="submit"]').click()
 
     time.sleep(3)
-    print("---------------------------------- ✅ Login to sattou Successfully ---------------------------------")
+    print("-- ✅ Login to sattou Successfully --")

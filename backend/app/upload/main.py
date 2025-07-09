@@ -8,9 +8,10 @@ from login import login
 from add_schedule import add_schedule
 
 driver = webdriver.Chrome()
-wait = WebDriverWait(driver, 50)
+wait = WebDriverWait(driver, timeout=300)
+wait50 = WebDriverWait(driver, timeout=50)
 
-print("▶ Step 1: Logging in to Sattou...")
+print("▶ Step 1: Logging in to Salonboard...")
 login(driver, wait)
 
 print("▶ Step 2: Adding schedule...")
@@ -18,8 +19,8 @@ print("▶ Step 2: Adding schedule...")
 with open("../data/clear_diff.csv", encoding="utf-8") as f:
     reader = csv.DictReader(f)
     for row in reader:
-        add_schedule(driver, wait, row)
+        add_schedule(driver, wait, wait50, row)
 
-time.sleep(10)
+time.sleep(1)
 
 print("✅ All steps completed successfully.")

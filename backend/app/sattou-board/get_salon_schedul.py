@@ -30,6 +30,13 @@ def get_salon_schedul(driver, download_dir):
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
+
+        # start_tag = soup.find('input', {'id': 'rsvDateFrom'})
+        # start_tag['value'] = '20250710'
+
+        # end_tag = soup.find('input', {'id': 'rsvDateTo'})
+        # end_tag['value'] = '20250810'
+
         options = soup.select('select#stylistId option')
 
         staff_list = []
@@ -52,9 +59,9 @@ def get_salon_schedul(driver, download_dir):
         print("-- ✅ Clicked download button --")
 
         # Step 7: Wait for file to download completely
+        num = 0
         while True:
             files = os.listdir(download_dir)
-            print("Files in download folder:", files)
 
             csv_ready = any(f.endswith(".csv") for f in files)
             crdownload_exists = any(f.endswith(".crdownload") for f in files)
@@ -63,14 +70,14 @@ def get_salon_schedul(driver, download_dir):
                 print("-- ✅ Download finished")
                 break
             else:
-                print("pending...")
+                print(f"{num} / 20")
+                num += 1
                 time.sleep(0.5)
 
         # Step 8: Wait a little extra time to ensure write is complete
         time.sleep(2)
 
-        print("-- ✅ Download completed. Closing browser. --")
-        print("-- ✅ Getting today schedule --")
+        print("-- ✅ Download completed. Getting today schedule. --")
 
     except Exception as e:
         print("❌ ボタンが見つかりませんでした:", e)

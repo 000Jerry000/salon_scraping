@@ -8,15 +8,15 @@ def compare_rows(a_file, b_file, output_file='../data/outfile.csv'):
     a_data = read_csv(a_file)
     b_data = read_csv(b_file)
 
+    # 「既存キャンセル」だけを除外（他の「キャンセル」は含める）
+    a_data = [row for row in a_data if len(row) > 4 and 'キャンセル' not in row[4]]
+    b_data = [row for row in b_data if row[0].strip() != 'サロンキャンセル']
+
     different_rows = []
 
     for a_row in a_data:
         a_1st = a_row[0].strip()
         a_2nd = a_row[1].strip()
-
-        # 「既存キャンセル」だけを除外（他の「キャンセル」は含める）
-        a_data = [row for row in a_data if len(row) > 4 and 'キャンセル' not in row[4]]
-        b_data = [row for row in b_data if row[0].strip() != 'サロンキャンセル']
 
         match_found = False
         mismatch_found = False
