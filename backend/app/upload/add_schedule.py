@@ -3,23 +3,33 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.action_chains import ActionChains
 
-def add_schedule(driver, wait, row):
+def add_schedule(driver, wait, wait50, row):
     try:
-        todo_inner = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".scheduleToDoInner")))
         time.sleep(0.1)
-        todo_inner.click()
-        print("-- ✅ Clicked .scheduleToDoInner --")
+        todo_inner = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".scheduleToDoInner")))
+        # Create ActionChains object
+        actions = ActionChains(driver)
 
-        # Then click the rest button (class: .mod_btn_11)
-        rest_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".mod_btn_11")))
-        rest_button.click()
-        print("-- ✅ Clicked .mod_btn_11 button --")
+        # Move to the element, offset by 100px from the left (x-axis), and 10px from the top (y-axis)
+        actions.move_to_element_with_offset(todo_inner, 100, 10).click().perform()
+        print("-- ✅ Clicked スケジュールバンド --")
 
     except Exception as e:
-        print("❌ 要素が見つかりませんでした:", e)
+        print("❌ 'todo_inner' 要素が見つかりませんでした")
+
+    for _ in range(2):
+        try:
+            rest_button = driver.find_element(By.CSS_SELECTOR, ".mod_btn_11")
+            rest_button.click()
+            print("-- ✅ Clicked '予約登録' button --")
+            break
+        except Exception:
+            time.sleep(0.5)
     try:
         # --- Step 2: Get values from CSV ---
+        date = row["date"]
         start_hour = row["start_hour"].zfill(2)     
         start_minute = row["start_minute"].zfill(2) 
         total_hour_min = row["total_hour"]  
@@ -29,6 +39,8 @@ def add_schedule(driver, wait, row):
         givenname = row["givenname"]
 
         # --- Step 3: Set form values ---
+        # --- Set date ---
+        driver.execute_script(f"document.getElementById('rsvDate').value = '{date}';")
         # Set Hour
         hour_select =  wait.until(EC.presence_of_element_located((By.ID, "jsiRsvHour")))
         Select(hour_select).select_by_value(start_hour)
@@ -55,7 +67,6 @@ def add_schedule(driver, wait, row):
         driver.find_element("id", "nmSeiKana").send_keys(surname)
         # driver.find_element("id", "nmMeiKana").send_keys(givenname)
 
-        print(f"✅ Inserted: {surname} {givenname} {start_hour}:{start_minute}")
 
         driver.find_element(By.ID, "regist").click()
         time.sleep(3)
@@ -64,13 +75,16 @@ def add_schedule(driver, wait, row):
         print("✅ アラートでOKをクリックしました。")
 
         try:
-            ok_button = wait.until(EC.element_to_be_clickable(
+            ok_button = wait50.until(EC.element_to_be_clickable(
                 (By.CSS_SELECTOR, "a.mod_btn_116.mb5.mr10.columnBlock.fr.accept")
             ))
             ok_button.click()
             print("✅ OKボタンをクリックしました。")
         except TimeoutException:
             print("⚠️ OKボタンが表示されませんでした（スキップします）")
+            
+        print(f"✅ Inserted: {surname} {givenname} {start_hour}:{start_minute}")
+        time.sleep(5)
 
     except Exception as e:
         print("❌ 要素が見つかりませんでした1:", e)
