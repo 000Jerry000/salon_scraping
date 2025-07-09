@@ -6,27 +6,10 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 
 def add_schedule(driver, wait, wait50, row):
-    try:
-        time.sleep(0.1)
-        todo_inner = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".scheduleToDoInner")))
-        # Create ActionChains object
-        actions = ActionChains(driver)
+    # try:
+    time.sleep(0.1)
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".scheduleToDoInner")))
 
-        # Move to the element, offset by 100px from the left (x-axis), and 10px from the top (y-axis)
-        actions.move_to_element_with_offset(todo_inner, 100, 10).click().perform()
-        print("-- ✅ Clicked スケジュールバンド --")
-
-    except Exception as e:
-        print("❌ 'todo_inner' 要素が見つかりませんでした")
-
-    for _ in range(2):
-        try:
-            rest_button = driver.find_element(By.CSS_SELECTOR, ".mod_btn_11")
-            rest_button.click()
-            print("-- ✅ Clicked '予約登録' button --")
-            break
-        except Exception:
-            time.sleep(0.5)
     try:
         # --- Step 2: Get values from CSV ---
         date = row["date"]
@@ -37,18 +20,14 @@ def add_schedule(driver, wait, wait50, row):
         staff_id = row["staff_id"]  
         surname = row["surname"]
         givenname = row["givenname"]
+        
+        url = f"https://salonboard.com/KLP/reserve/ext/extReserveRegist/?staffId={staff_id}&date={date}&rsvHour={start_hour}&rsvMinute={start_minute}"
+
+        driver.get(url)
+
+        time.sleep(1)
 
         # --- Step 3: Set form values ---
-        # --- Set date ---
-        driver.execute_script(f"document.getElementById('rsvDate').value = '{date}';")
-        # Set Hour
-        hour_select =  wait.until(EC.presence_of_element_located((By.ID, "jsiRsvHour")))
-        Select(hour_select).select_by_value(start_hour)
-
-        # Set Minute
-        
-        minute_select = wait.until(EC.presence_of_element_located((By.ID, "jsiRsvMinute")))
-        Select(minute_select).select_by_value(start_minute)
 
         # 時間（分単位）を select で選択
         wait.until(EC.presence_of_element_located((By.ID, "jsiRsvTermHour")))
@@ -57,10 +36,6 @@ def add_schedule(driver, wait, wait50, row):
         # 分を select で選択
         wait.until(EC.presence_of_element_located((By.ID, "jsiRsvTermMinute")))
         Select(driver.find_element("id", "jsiRsvTermMinute")).select_by_value(total_minute)
-
-        # --- Set staff ID ---
-        staff_select = Select(driver.find_element("name", "staffIdList"))
-        staff_select.select_by_value(staff_id)
         
         # Set client name (if applicable)
         wait.until(EC.presence_of_element_located((By.ID, "nmSeiKana")))
