@@ -15,6 +15,7 @@ from login import login
 from getting_schedule import getting_schedule
 from finding_diff import compare_rows
 from clear_diff import clear_diff
+from add_schedule import add_schedule
 
 # Step 1: Set and clean download directory
 download_dir = os.path.abspath("../downloads")
@@ -55,6 +56,8 @@ chrome_options.add_experimental_option("prefs", {
 
 # Step 3: Launch browser
 driver = webdriver.Chrome(options=chrome_options)
+wait = WebDriverWait(driver, timeout=300)
+wait50 = WebDriverWait(driver, timeout=50)
 
 print("▶ Step 0: Loggin to Salonboard...")
 get_salon_schedul(driver, download_dir)
@@ -73,5 +76,16 @@ compare_rows('../data/sattou_schedule.csv', '../data/board_data.csv')
 
 print("▶ Step 5: Clear different data...")
 clear_diff()
+
+driver.get('https://salonboard.com/KLP/schedule/salonSchedule/')
+
+print("▶ Step 6: Adding schedule....")
+# --- Step 1: Read the CSV ---
+with open("../data/clear_diff.csv", encoding="utf-8") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        add_schedule(driver, wait, wait50, row)
+
+time.sleep(1)
 
 print("✅ All steps completed successfully.")

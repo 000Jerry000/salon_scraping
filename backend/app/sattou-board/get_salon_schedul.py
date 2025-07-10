@@ -59,7 +59,6 @@ def get_salon_schedul(driver, download_dir):
         print("-- ✅ Clicked download button --")
 
         # Step 7: Wait for file to download completely
-        num = 0
         while True:
             files = os.listdir(download_dir)
 
@@ -70,8 +69,6 @@ def get_salon_schedul(driver, download_dir):
                 print("-- ✅ Download finished")
                 break
             else:
-                print(f"{num} / 20")
-                num += 1
                 time.sleep(0.5)
 
         # Step 8: Wait a little extra time to ensure write is complete
