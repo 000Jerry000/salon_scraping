@@ -21,15 +21,9 @@ pip install -r requirements.txt
 ```
 
 ## How to use
-### First, run the main.py in the sattou-board folder.
+### If you want to register a reservation on the Sattou site to the Salonboard site, Run the main.py in the sattou-board folder.
 ```bash
 cd .\backend\app\sattou-board\
-py main.py
-```
-
-### Next, run the main.py in the upload folder.
-```bash
-cd .\backend\app\upload\
 py main.py
 ```
 
