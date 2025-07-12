@@ -113,7 +113,7 @@ if __name__ == "__main__":
 
     token, session = auth_token(API_URL, BRAND_DIR, USER_NAME, PASSWORD)
 
-    shop_id = 2
+    shop_id = 5
 
     params = {
         'param1': 2,
