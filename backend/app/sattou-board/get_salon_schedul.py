@@ -31,11 +31,11 @@ def get_salon_schedul(driver, download_dir):
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
-        # start_tag = soup.find('input', {'id': 'rsvDateFrom'})
-        # start_tag['value'] = '20250710'
+        start_tag = soup.find('input', {'id': 'rsvDateFrom'})
+        start_tag['value'] = '20250710'
 
-        # end_tag = soup.find('input', {'id': 'rsvDateTo'})
-        # end_tag['value'] = '20250810'
+        end_tag = soup.find('input', {'id': 'rsvDateTo'})
+        end_tag['value'] = '20250810'
 
         options = soup.select('select#stylistId option')
 
